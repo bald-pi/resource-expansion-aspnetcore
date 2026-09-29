@@ -1,0 +1,24 @@
+{
+  "id": 1001,
+  "number": "ORD-1001",
+  "status": "paid",
+  "totalCents": 16000,
+  "customerId": 1,
+  "customer": null,
+  "items": {
+    "data": [
+      {
+        "id": 1,
+        "productId": 1,
+        "quantity": 1,
+        "unitPriceCents": 10000,
+        "product": {
+          "id": 1,
+          "name": "Mechanical keyboard"
+        }
+      }
+    ],
+    "limit": 1,
+    "hasMore": true
+  }
+}

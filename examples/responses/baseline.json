@@ -1,0 +1,9 @@
+{
+  "id": 1001,
+  "number": "ORD-1001",
+  "status": "paid",
+  "totalCents": 16000,
+  "customerId": 1,
+  "customer": null,
+  "items": null
+}

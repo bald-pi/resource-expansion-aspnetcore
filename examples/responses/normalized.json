@@ -1,0 +1,38 @@
+{
+  "id": 1001,
+  "number": "ORD-1001",
+  "status": "paid",
+  "totalCents": 16000,
+  "customerId": 1,
+  "customer": {
+    "id": 1,
+    "name": "Alice Morgan",
+    "email": "alice@example.com"
+  },
+  "items": {
+    "data": [
+      {
+        "id": 1,
+        "productId": 1,
+        "quantity": 1,
+        "unitPriceCents": 10000,
+        "product": {
+          "id": 1,
+          "name": "Mechanical keyboard"
+        }
+      },
+      {
+        "id": 2,
+        "productId": 2,
+        "quantity": 1,
+        "unitPriceCents": 4000,
+        "product": {
+          "id": 2,
+          "name": "Wireless mouse"
+        }
+      }
+    ],
+    "limit": 2,
+    "hasMore": true
+  }
+}

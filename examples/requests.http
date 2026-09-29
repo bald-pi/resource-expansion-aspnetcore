@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:5080
+
+### Baseline: 200, relationships null
+GET {{baseUrl}}/api/orders/1001
+
+### Single expansion: 200
+GET {{baseUrl}}/api/orders/1001?expand=customer
+
+### Items without products: 200
+GET {{baseUrl}}/api/orders/1001?expand=items
+
+### Nested expansion: 200
+GET {{baseUrl}}/api/orders/1001?expand=customer,items.product&relatedLimit=3
+
+### Bounded preview: 200, hasMore true
+GET {{baseUrl}}/api/orders/1001?expand=items.product&relatedLimit=1
+
+### Empty collection: 200, data []
+GET {{baseUrl}}/api/orders/1002?expand=items
+
+### Unsupported relationship: 400
+GET {{baseUrl}}/api/orders/1001?expand=payments
+
+### Excess depth: 400
+GET {{baseUrl}}/api/orders/1001?expand=items.product.supplier
+
+### Excess limit: 400
+GET {{baseUrl}}/api/orders/1001?expand=items&relatedLimit=51
+
+### Missing order: 404
+GET {{baseUrl}}/api/orders/9999
+
+### Normalized selections: 200
+GET {{baseUrl}}/api/orders/1001?expand=%20CUSTOMER%20,items.product,customer

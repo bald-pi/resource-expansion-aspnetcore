@@ -1,0 +1,13 @@
+{
+  "id": 1002,
+  "number": "ORD-1002",
+  "status": "draft",
+  "totalCents": 0,
+  "customerId": 1,
+  "customer": null,
+  "items": {
+    "data": [],
+    "limit": 2,
+    "hasMore": false
+  }
+}

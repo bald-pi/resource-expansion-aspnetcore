@@ -1,0 +1,79 @@
+[
+  {
+    "name": "baseline",
+    "method": "GET",
+    "path": "/api/orders/1001",
+    "token": null,
+    "status": 200
+  },
+  {
+    "name": "customer",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=customer",
+    "token": null,
+    "status": 200
+  },
+  {
+    "name": "items",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=items",
+    "token": null,
+    "status": 200
+  },
+  {
+    "name": "nested",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=customer,items.product&relatedLimit=3",
+    "token": null,
+    "status": 200
+  },
+  {
+    "name": "truncated",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=items.product&relatedLimit=1",
+    "token": null,
+    "status": 200
+  },
+  {
+    "name": "empty",
+    "method": "GET",
+    "path": "/api/orders/1002?expand=items",
+    "token": null,
+    "status": 200
+  },
+  {
+    "name": "unsupported",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=payments",
+    "token": null,
+    "status": 400
+  },
+  {
+    "name": "depth",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=items.product.supplier",
+    "token": null,
+    "status": 400
+  },
+  {
+    "name": "limit",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=items&relatedLimit=51",
+    "token": null,
+    "status": 400
+  },
+  {
+    "name": "missing-order",
+    "method": "GET",
+    "path": "/api/orders/9999",
+    "token": null,
+    "status": 404
+  },
+  {
+    "name": "normalized",
+    "method": "GET",
+    "path": "/api/orders/1001?expand=%20CUSTOMER%20,items.product,customer",
+    "token": null,
+    "status": 200
+  }
+]

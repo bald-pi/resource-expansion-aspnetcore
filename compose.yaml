@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: expansion_demo
+      POSTGRES_USER: expansion
+      POSTGRES_PASSWORD: local-demo-password
+    ports:
+      - "127.0.0.1:54329:5432"
+    volumes:
+      - orders-data:/var/lib/postgresql/data
+    # Lets `docker compose up --wait` return only when the database accepts connections.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U expansion -d expansion_demo"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  orders-data:
