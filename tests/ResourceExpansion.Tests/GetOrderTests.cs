@@ -27,25 +27,25 @@ public sealed class GetOrderTests(ApiFixture fixture) : IClassFixture<ApiFixture
     }
 
     [Fact]
-    public async Task Items_without_products_are_bounded_by_related_limit()
+    public async Task Items_are_bounded_by_related_limit()
     {
         var items = (await GetOk("/api/orders/1001?expand=items&relatedLimit=1")).GetProperty("items");
 
         Assert.Single(items.GetProperty("data").EnumerateArray());
         Assert.True(items.GetProperty("hasMore").GetBoolean());
-        Assert.Equal(JsonValueKind.Null, items.GetProperty("data")[0].GetProperty("product").ValueKind);
     }
 
     [Fact]
-    public async Task Nested_expansion_loads_items_with_products_in_one_query()
+    public async Task Combined_expansion_loads_customer_and_items_in_one_query()
     {
         fixture.Sql.Commands.Clear();
-        var json = await GetOk("/api/orders/1001?expand=customer,items.product&relatedLimit=3");
+        var json = await GetOk("/api/orders/1001?expand=customer,items&relatedLimit=3");
         var items = json.GetProperty("items");
 
+        Assert.Equal("Alice Morgan", json.GetProperty("customer").GetProperty("name").GetString());
         Assert.Equal(3, items.GetProperty("data").GetArrayLength());
         Assert.False(items.GetProperty("hasMore").GetBoolean());
-        Assert.Equal("Mechanical keyboard", items.GetProperty("data")[0].GetProperty("product").GetProperty("name").GetString());
+        Assert.Equal(10000, items.GetProperty("data")[0].GetProperty("unitPriceCents").GetInt64());
         Assert.Single(fixture.Sql.Commands);
     }
 
@@ -60,7 +60,8 @@ public sealed class GetOrderTests(ApiFixture fixture) : IClassFixture<ApiFixture
 
     [Theory]
     [InlineData("?expand=payments")]
-    [InlineData("?expand=items.product.supplier")]
+    [InlineData("?expand=items.product")]
+    [InlineData("?expand=customer.orders.items")]
     [InlineData("?relatedLimit=51")]
     [InlineData("?relatedLimit=abc")]
     public async Task Invalid_request_returns_400_before_database_access(string query)
@@ -75,7 +76,7 @@ public sealed class GetOrderTests(ApiFixture fixture) : IClassFixture<ApiFixture
     [Fact]
     public async Task Missing_order_returns_404()
     {
-        using var response = await fixture.Factory.CreateClient().GetAsync("/api/orders/9999?expand=items.product");
+        using var response = await fixture.Factory.CreateClient().GetAsync("/api/orders/9999?expand=customer,items");
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 

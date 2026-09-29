@@ -14,10 +14,7 @@ public static class OrderQuery
             query = query.Include(order => order.Customer);
 
         if (expand.Items)
-        {
-            var withItems = query.Include(order => order.Items.OrderBy(item => item.Id).Take(take));
-            query = expand.ItemProducts ? withItems.ThenInclude(item => item.Product) : withItems;
-        }
+            query = query.Include(order => order.Items.OrderBy(item => item.Id).Take(take));
 
         return query;
     }

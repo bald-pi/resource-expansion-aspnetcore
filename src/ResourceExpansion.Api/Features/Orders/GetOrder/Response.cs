@@ -23,19 +23,12 @@ public sealed record CustomerResponse(int Id, string Name, string Email)
 public sealed record ItemsResponse(IReadOnlyList<ItemResponse> Data, int Limit, bool HasMore)
 {
     public static ItemsResponse From(List<OrderItem> items, OrderExpand expand) => new(
-        Data: items.Take(expand.RelatedLimit).Select(item => ItemResponse.From(item, expand)).ToList(),
+        Data: items.Take(expand.RelatedLimit).Select(ItemResponse.From).ToList(),
         Limit: expand.RelatedLimit,
         HasMore: items.Count > expand.RelatedLimit);
 }
 
-public sealed record ItemResponse(int Id, int ProductId, int Quantity, long UnitPriceCents, ProductResponse? Product)
+public sealed record ItemResponse(int Id, int Quantity, long UnitPriceCents)
 {
-    public static ItemResponse From(OrderItem item, OrderExpand expand) => new(
-        item.Id, item.ProductId, item.Quantity, item.UnitPriceCents,
-        expand.ItemProducts ? ProductResponse.From(item.Product) : null);
-}
-
-public sealed record ProductResponse(int Id, string Name)
-{
-    public static ProductResponse From(Product product) => new(product.Id, product.Name);
+    public static ItemResponse From(OrderItem item) => new(item.Id, item.Quantity, item.UnitPriceCents);
 }

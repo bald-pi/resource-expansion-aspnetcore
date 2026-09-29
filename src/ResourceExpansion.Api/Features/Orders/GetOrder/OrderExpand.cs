@@ -5,7 +5,7 @@ public sealed record GetOrderQuery(string? Expand, int? RelatedLimit);
 
 // The validated expansion plan. Request strings are only compared against the allowlist;
 // they never reach EF Core.
-public sealed record OrderExpand(bool Customer, bool Items, bool ItemProducts, int RelatedLimit)
+public sealed record OrderExpand(bool Customer, bool Items, int RelatedLimit)
 {
     public const int DefaultRelatedLimit = 2;
     public const int MaxRelatedLimit = 50;
@@ -13,7 +13,7 @@ public sealed record OrderExpand(bool Customer, bool Items, bool ItemProducts, i
     // Choose the smallest depth your clients actually need.
     public const int MaxDepth = 2;
 
-    public static readonly string[] Allowed = ["customer", "items", "items.product"];
+    public static readonly string[] Allowed = ["customer", "items"];
 
     public static HashSet<string> SplitPaths(string? expand) => (expand ?? "")
         .Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
@@ -23,13 +23,9 @@ public sealed record OrderExpand(bool Customer, bool Items, bool ItemProducts, i
     public static OrderExpand From(GetOrderQuery query)
     {
         var paths = SplitPaths(query.Expand);
-
-        // Expanding items.product implies items.
-        var itemProducts = paths.Contains("items.product");
         return new OrderExpand(
             Customer: paths.Contains("customer"),
-            Items: itemProducts || paths.Contains("items"),
-            ItemProducts: itemProducts,
+            Items: paths.Contains("items"),
             RelatedLimit: query.RelatedLimit ?? DefaultRelatedLimit);
     }
 }
