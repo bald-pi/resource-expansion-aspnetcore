@@ -236,11 +236,11 @@ public sealed record Related<T>(IReadOnlyList<T> Data, int Limit, bool HasMore);
 
 public static class Related
 {
-    public static Related<TResult> From<TSource, TResult>(IReadOnlyCollection<TSource> rows, ExpandPlan plan,
+    public static Related<TResult> From<TSource, TResult>(IReadOnlyCollection<TSource> rows, int limit,
         Func<TSource, TResult> map) => new(
-        Data: rows.Take(plan.RelatedLimit).Select(map).ToList(),
-        Limit: plan.RelatedLimit,
-        HasMore: rows.Count > plan.RelatedLimit);
+        Data: rows.Take(limit).Select(map).ToList(),
+        Limit: limit,
+        HasMore: rows.Count > limit);
 }
 ```
 
@@ -254,7 +254,7 @@ public static MembershipResponse ToResponse(this Membership membership, ExpandPl
         ? new MemberResponse(membership.Member.Id, membership.Member.Name, membership.Member.Email)
         : null,
     Visits: plan.Has("visits")
-        ? Related.From(membership.Visits, plan, visit => new VisitResponse(
+        ? Related.From(membership.Visits, plan.RelatedLimit, visit => new VisitResponse(
             visit.Id, visit.CheckedInAt, visit.ClubId,
             Club: plan.Has("visits.club") ? new ClubResponse(visit.Club.Id, visit.Club.Name, visit.Club.City) : null))
         : null);
