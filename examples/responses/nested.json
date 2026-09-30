@@ -1,44 +1,47 @@
 {
   "id": 1001,
-  "number": "ORD-1001",
-  "status": "paid",
-  "totalCents": 16000,
-  "customerId": 1,
-  "customer": {
+  "number": "MEM-1001",
+  "plan": "Premium",
+  "status": "active",
+  "startsOn": "2026-01-01",
+  "endsOn": "2026-12-31",
+  "monthlyFeeCents": 4900,
+  "memberId": 1,
+  "member": {
     "id": 1,
     "name": "Alice Morgan",
     "email": "alice@example.com"
   },
-  "items": {
+  "visits": {
     "data": [
       {
-        "id": 1,
-        "productId": 1,
-        "quantity": 1,
-        "unitPriceCents": 10000,
-        "product": {
+        "id": 3,
+        "checkedInAt": "2026-09-27T06:45:00+00:00",
+        "clubId": 1,
+        "club": {
           "id": 1,
-          "name": "Mechanical keyboard"
+          "name": "Downtown",
+          "city": "Seattle"
         }
       },
       {
         "id": 2,
-        "productId": 2,
-        "quantity": 1,
-        "unitPriceCents": 4000,
-        "product": {
+        "checkedInAt": "2026-09-24T18:15:00+00:00",
+        "clubId": 2,
+        "club": {
           "id": 2,
-          "name": "Wireless mouse"
+          "name": "Riverside",
+          "city": "Bellevue"
         }
       },
       {
-        "id": 3,
-        "productId": 3,
-        "quantity": 1,
-        "unitPriceCents": 2000,
-        "product": {
-          "id": 3,
-          "name": "Desk mat"
+        "id": 1,
+        "checkedInAt": "2026-09-20T07:30:00+00:00",
+        "clubId": 1,
+        "club": {
+          "id": 1,
+          "name": "Downtown",
+          "city": "Seattle"
         }
       }
     ],

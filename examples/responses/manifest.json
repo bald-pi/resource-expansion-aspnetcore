@@ -2,77 +2,77 @@
   {
     "name": "baseline",
     "method": "GET",
-    "path": "/api/orders/1001",
+    "path": "/api/memberships/1001",
     "token": null,
     "status": 200
   },
   {
-    "name": "customer",
+    "name": "member",
     "method": "GET",
-    "path": "/api/orders/1001?expand=customer",
+    "path": "/api/memberships/1001?expand=member",
     "token": null,
     "status": 200
   },
   {
-    "name": "items",
+    "name": "visits",
     "method": "GET",
-    "path": "/api/orders/1001?expand=items",
+    "path": "/api/memberships/1001?expand=visits",
     "token": null,
     "status": 200
   },
   {
     "name": "nested",
     "method": "GET",
-    "path": "/api/orders/1001?expand=customer,items.product&relatedLimit=3",
+    "path": "/api/memberships/1001?expand=member,visits.club&relatedLimit=3",
     "token": null,
     "status": 200
   },
   {
     "name": "truncated",
     "method": "GET",
-    "path": "/api/orders/1001?expand=items.product&relatedLimit=1",
+    "path": "/api/memberships/1001?expand=visits&relatedLimit=1",
     "token": null,
     "status": 200
   },
   {
     "name": "empty",
     "method": "GET",
-    "path": "/api/orders/1002?expand=items",
+    "path": "/api/memberships/1002?expand=visits",
     "token": null,
     "status": 200
   },
   {
     "name": "unsupported",
     "method": "GET",
-    "path": "/api/orders/1001?expand=payments",
+    "path": "/api/memberships/1001?expand=payments",
     "token": null,
     "status": 400
   },
   {
     "name": "depth",
     "method": "GET",
-    "path": "/api/orders/1001?expand=items.product.supplier",
+    "path": "/api/memberships/1001?expand=visits.club.address",
     "token": null,
     "status": 400
   },
   {
     "name": "limit",
     "method": "GET",
-    "path": "/api/orders/1001?expand=items&relatedLimit=51",
+    "path": "/api/memberships/1001?expand=visits&relatedLimit=51",
     "token": null,
     "status": 400
   },
   {
-    "name": "missing-order",
+    "name": "missing-membership",
     "method": "GET",
-    "path": "/api/orders/9999",
+    "path": "/api/memberships/9999",
     "token": null,
     "status": 404
   },
   {
     "name": "normalized",
     "method": "GET",
-    "path": "/api/orders/1001?expand=%20CUSTOMER%20,items.product,customer",
+    "path": "/api/memberships/1001?expand=%20MEMBER%20,visits.club,member",
     "token": null,
     "status": 200
   }

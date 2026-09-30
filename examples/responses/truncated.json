@@ -1,21 +1,20 @@
 {
   "id": 1001,
-  "number": "ORD-1001",
-  "status": "paid",
-  "totalCents": 16000,
-  "customerId": 1,
-  "customer": null,
-  "items": {
+  "number": "MEM-1001",
+  "plan": "Premium",
+  "status": "active",
+  "startsOn": "2026-01-01",
+  "endsOn": "2026-12-31",
+  "monthlyFeeCents": 4900,
+  "memberId": 1,
+  "member": null,
+  "visits": {
     "data": [
       {
-        "id": 1,
-        "productId": 1,
-        "quantity": 1,
-        "unitPriceCents": 10000,
-        "product": {
-          "id": 1,
-          "name": "Mechanical keyboard"
-        }
+        "id": 3,
+        "checkedInAt": "2026-09-27T06:45:00+00:00",
+        "clubId": 1,
+        "club": null
       }
     ],
     "limit": 1,

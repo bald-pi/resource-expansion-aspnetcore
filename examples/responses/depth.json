@@ -4,7 +4,7 @@
   "status": 400,
   "errors": {
     "expand": [
-      "Expansion depth cannot exceed 2: items.product.supplier."
+      "Expansion depth cannot exceed 2: visits.club.address."
     ]
   }
 }

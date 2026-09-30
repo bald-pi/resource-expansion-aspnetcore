@@ -4,15 +4,15 @@ All requests use `http://localhost:5080`.
 
 | Use case | Request | Expected result |
 |---|---|---|
-| Order-status card | `/api/orders/1001` | Order fields only; `customer` and `items` null |
-| Customer contact details (single) | `/api/orders/1001?expand=customer` | Customer object; `items` null |
-| Item preview | `/api/orders/1001?expand=items` | First two items; `product` null; `hasMore` true |
-| Order detail screen (nested) | `/api/orders/1001?expand=customer,items.product&relatedLimit=3` | Customer and all three items with products |
-| Smaller preview | `/api/orders/1001?expand=items.product&relatedLimit=1` | One item; `hasMore` true |
-| Empty draft | `/api/orders/1002?expand=items` | Empty `data` array; `hasMore` false |
-| Unsupported relationship | `/api/orders/1001?expand=payments` | 400 with supported paths |
-| Excess depth | `/api/orders/1001?expand=items.product.supplier` | 400 |
-| Excess collection size | `/api/orders/1001?expand=items&relatedLimit=51` | 400 |
-| Unknown order | `/api/orders/9999` | 404 |
+| Membership card | `/api/memberships/1001` | Membership fields only; `member` and `visits` null |
+| Member contact details | `/api/memberships/1001?expand=member` | Member object; `visits` null |
+| Recent visits | `/api/memberships/1001?expand=visits` | Two most recent visits; `club` null; `hasMore` true |
+| Front-desk screen (nested) | `/api/memberships/1001?expand=member,visits.club&relatedLimit=3` | Member and all three visits with clubs |
+| Last visit only | `/api/memberships/1001?expand=visits&relatedLimit=1` | One visit; `hasMore` true |
+| Pending renewal | `/api/memberships/1002?expand=visits` | Empty `data` array; `hasMore` false |
+| Unsupported relationship | `/api/memberships/1001?expand=payments` | 400 with supported paths |
+| Excess depth | `/api/memberships/1001?expand=visits.club.address` | 400 |
+| Excess collection size | `/api/memberships/1001?expand=visits&relatedLimit=51` | 400 |
+| Unknown membership | `/api/memberships/9999` | 404 |
 
-Every expansion runs as a single SQL query. The baseline selects only the order row; `customer` adds a join; `items.product` adds a limited item subquery joined to products.
+Every expansion runs as a single SQL query. The baseline selects only the membership row; `member` adds a join; `visits` adds a limited visit subquery; `visits.club` joins that subquery to clubs.

@@ -1,6 +1,42 @@
+# .NET build output
 **/bin/
 **/obj/
 **/App_Data/
+*.nupkg
+*.binlog
+
+# Test and benchmark output
 TestResults/
+coverage*/
+*.trx
+BenchmarkDotNet.Artifacts/
+
+# IDE and editor state (shared launchSettings.json is kept)
 .vs/
+.idea/
+.vscode/*
+!.vscode/extensions.json
 *.user
+*.suo
+*.userprefs
+*.DotSettings.user
+*.swp
+*~
+
+# Local configuration and secrets
+appsettings.*.local.json
+.env
+.env.*
+
+# Python (scripts/refresh-blog-examples.py)
+__pycache__/
+*.py[cod]
+.venv/
+
+# Logs, merge leftovers, OS junk
+*.log
+*.orig
+*.rej
+.DS_Store
+Thumbs.db
+Desktop.ini

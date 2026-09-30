@@ -38,9 +38,9 @@ public sealed class ApiFixture : IAsyncLifetime
         {
             builder.UseEnvironment("Testing");
             builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(
-                new Dictionary<string, string?> { ["ConnectionStrings:Orders"] = connectionString }));
+                new Dictionary<string, string?> { ["ConnectionStrings:Memberships"] = connectionString }));
             builder.ConfigureServices(services =>
-                services.AddDbContext<OrdersDbContext>(options => options.AddInterceptors(recorder)));
+                services.AddDbContext<MembershipsDbContext>(options => options.AddInterceptors(recorder)));
         }
     }
 }

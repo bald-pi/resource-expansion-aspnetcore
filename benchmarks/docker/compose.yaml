@@ -1,0 +1,45 @@
+# Benchmark environment. The benchmark starts it with `up --build --wait` and removes it with `down -v`.
+#
+#   benchmark client --> toxiproxy:18080 --> api:8080 --> toxiproxy:15432 --> postgres:5432
+#
+# Toxiproxy adds latency to both links. The benchmark also connects to PostgreSQL directly on
+# port 54330 to seed data and to read query counts from pg_stat_statements.
+services:
+  postgres:
+    image: postgres:17-alpine
+    command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
+    environment:
+      POSTGRES_DB: expansion_bench
+      POSTGRES_USER: bench
+      POSTGRES_PASSWORD: bench
+    ports:
+      - "127.0.0.1:54330:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bench -d expansion_bench"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+
+  toxiproxy:
+    image: ghcr.io/shopify/toxiproxy:2.12.0
+    command: ["-host=0.0.0.0", "-config=/config/toxiproxy.json"]
+    volumes:
+      - ./toxiproxy.json:/config/toxiproxy.json:ro
+    ports:
+      - "127.0.0.1:8474:8474"
+      - "127.0.0.1:18080:18080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    build:
+      context: ../..
+      dockerfile: src/ResourceExpansion.Api/Dockerfile
+    environment:
+      ConnectionStrings__Memberships: "Host=toxiproxy;Port=15432;Database=expansion_bench;Username=bench;Password=bench"
+      # SQL command logging would dominate the timings.
+      Logging__LogLevel__Default: Warning
+      Logging__LogLevel__Microsoft.EntityFrameworkCore.Database.Command: Warning
+    depends_on:
+      - toxiproxy

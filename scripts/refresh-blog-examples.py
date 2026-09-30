@@ -8,17 +8,17 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 MARKER = "<!-- generated examples and source below -->"
 CASES = [
-    ("baseline", "/api/orders/1001", None, 200),
-    ("customer", "/api/orders/1001?expand=customer", None, 200),
-    ("items", "/api/orders/1001?expand=items", None, 200),
-    ("nested", "/api/orders/1001?expand=customer,items.product&relatedLimit=3", None, 200),
-    ("truncated", "/api/orders/1001?expand=items.product&relatedLimit=1", None, 200),
-    ("empty", "/api/orders/1002?expand=items", None, 200),
-    ("unsupported", "/api/orders/1001?expand=payments", None, 400),
-    ("depth", "/api/orders/1001?expand=items.product.supplier", None, 400),
-    ("limit", "/api/orders/1001?expand=items&relatedLimit=51", None, 400),
-    ("missing-order", "/api/orders/9999", None, 404),
-    ("normalized", "/api/orders/1001?expand=%20CUSTOMER%20,items.product,customer", None, 200),
+    ("baseline", "/api/memberships/1001", None, 200),
+    ("member", "/api/memberships/1001?expand=member", None, 200),
+    ("visits", "/api/memberships/1001?expand=visits", None, 200),
+    ("nested", "/api/memberships/1001?expand=member,visits.club&relatedLimit=3", None, 200),
+    ("truncated", "/api/memberships/1001?expand=visits&relatedLimit=1", None, 200),
+    ("empty", "/api/memberships/1002?expand=visits", None, 200),
+    ("unsupported", "/api/memberships/1001?expand=payments", None, 400),
+    ("depth", "/api/memberships/1001?expand=visits.club.address", None, 400),
+    ("limit", "/api/memberships/1001?expand=visits&relatedLimit=51", None, 400),
+    ("missing-membership", "/api/memberships/9999", None, 404),
+    ("normalized", "/api/memberships/1001?expand=%20MEMBER%20,visits.club,member", None, 200),
 ]
 
 
@@ -54,7 +54,7 @@ def main():
     content = blog.read_text(encoding="utf-8").split(MARKER)[0].rstrip() + "\n\n" + MARKER + "\n"
     content += "\n## Example requests and responses\n\nCaptured from the running PostgreSQL-backed API. Dynamic trace IDs, if present, are omitted. "
     content += f"All {len(CASES)} captured cases are available in [examples/responses](../examples/responses); the manifest records request paths, tokens, and statuses.\n"
-    selected = {"baseline", "customer", "nested", "truncated", "empty", "unsupported", "depth", "missing-order"}
+    selected = {"baseline", "member", "visits", "nested", "truncated", "empty", "unsupported", "depth", "missing-membership"}
     for name, path, token, status in CASES:
         if name not in selected:
             continue
@@ -66,14 +66,21 @@ def main():
     content += "\n## Complete API implementation\n\nThe source below matches the runnable files. Tests live in `tests/ResourceExpansion.Tests`.\n"
     files = [
         "Directory.Build.props", "compose.yaml", "src/ResourceExpansion.Api/ResourceExpansion.Api.csproj",
-        "src/ResourceExpansion.Api/Program.cs", "src/ResourceExpansion.Api/Domain/Order.cs",
-        "src/ResourceExpansion.Api/Infrastructure/OrdersDbContext.cs",
+        "src/ResourceExpansion.Api/Program.cs", "src/ResourceExpansion.Api/Domain/Membership.cs",
+        "src/ResourceExpansion.Api/Infrastructure/MembershipsDbContext.cs",
         "src/ResourceExpansion.Api/Infrastructure/DemoData.cs",
-        "src/ResourceExpansion.Api/Features/Orders/GetOrder/OrderExpand.cs",
-        "src/ResourceExpansion.Api/Features/Orders/GetOrder/GetOrderQueryValidator.cs",
-        "src/ResourceExpansion.Api/Features/Orders/GetOrder/OrderQuery.cs",
-        "src/ResourceExpansion.Api/Features/Orders/GetOrder/Response.cs",
-        "src/ResourceExpansion.Api/Features/Orders/GetOrder/Endpoint.cs",
+        "src/ResourceExpansion.Api/Expansion/IExpandableRequest.cs",
+        "src/ResourceExpansion.Api/Expansion/ExpandPlan.cs",
+        "src/ResourceExpansion.Api/Expansion/ExpandRequestValidator.cs",
+        "src/ResourceExpansion.Api/Expansion/ExpansionRules.cs",
+        "src/ResourceExpansion.Api/Expansion/Related.cs",
+        "src/ResourceExpansion.Api/Features/Memberships/GetMembership/GetMembershipRequest.cs",
+        "src/ResourceExpansion.Api/Features/Memberships/GetMembership/MembershipExpansions.cs",
+        "src/ResourceExpansion.Api/Features/Memberships/GetMembership/Response.cs",
+        "src/ResourceExpansion.Api/Features/Memberships/GetMembership/Endpoint.cs",
+        "src/ResourceExpansion.Api/Features/Members/GetMember/Endpoint.cs",
+        "src/ResourceExpansion.Api/Features/Memberships/GetMembershipVisits/Endpoint.cs",
+        "src/ResourceExpansion.Api/Features/Clubs/GetClub/Endpoint.cs",
         "src/ResourceExpansion.Api/appsettings.json",
         "src/ResourceExpansion.Api/Properties/launchSettings.json",
     ]

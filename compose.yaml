@@ -8,7 +8,7 @@ services:
     ports:
       - "127.0.0.1:54329:5432"
     volumes:
-      - orders-data:/var/lib/postgresql/data
+      - memberships-data:/var/lib/postgresql/data
     # Lets `docker compose up --wait` return only when the database accepts connections.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U expansion -d expansion_demo"]
@@ -17,4 +17,4 @@ services:
       retries: 20
 
 volumes:
-  orders-data:
+  memberships-data:

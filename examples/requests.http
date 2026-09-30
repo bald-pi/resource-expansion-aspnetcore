@@ -1,34 +1,43 @@
 @baseUrl = http://localhost:5080
 
 ### Baseline: 200, relationships null
-GET {{baseUrl}}/api/orders/1001
+GET {{baseUrl}}/api/memberships/1001
 
 ### Single expansion: 200
-GET {{baseUrl}}/api/orders/1001?expand=customer
+GET {{baseUrl}}/api/memberships/1001?expand=member
 
-### Items without products: 200
-GET {{baseUrl}}/api/orders/1001?expand=items
+### Visits without clubs: 200
+GET {{baseUrl}}/api/memberships/1001?expand=visits
 
 ### Nested expansion: 200
-GET {{baseUrl}}/api/orders/1001?expand=customer,items.product&relatedLimit=3
+GET {{baseUrl}}/api/memberships/1001?expand=member,visits.club&relatedLimit=3
 
 ### Bounded preview: 200, hasMore true
-GET {{baseUrl}}/api/orders/1001?expand=items.product&relatedLimit=1
+GET {{baseUrl}}/api/memberships/1001?expand=visits&relatedLimit=1
 
 ### Empty collection: 200, data []
-GET {{baseUrl}}/api/orders/1002?expand=items
+GET {{baseUrl}}/api/memberships/1002?expand=visits
 
 ### Unsupported relationship: 400
-GET {{baseUrl}}/api/orders/1001?expand=payments
+GET {{baseUrl}}/api/memberships/1001?expand=payments
 
 ### Excess depth: 400
-GET {{baseUrl}}/api/orders/1001?expand=items.product.supplier
+GET {{baseUrl}}/api/memberships/1001?expand=visits.club.address
 
 ### Excess limit: 400
-GET {{baseUrl}}/api/orders/1001?expand=items&relatedLimit=51
+GET {{baseUrl}}/api/memberships/1001?expand=visits&relatedLimit=51
 
-### Missing order: 404
-GET {{baseUrl}}/api/orders/9999
+### Missing membership: 404
+GET {{baseUrl}}/api/memberships/9999
 
 ### Normalized selections: 200
-GET {{baseUrl}}/api/orders/1001?expand=%20CUSTOMER%20,items.product,customer
+GET {{baseUrl}}/api/memberships/1001?expand=%20MEMBER%20,visits.club,member
+
+### Separate requests (the alternative the benchmark compares against)
+GET {{baseUrl}}/api/members/1
+
+###
+GET {{baseUrl}}/api/memberships/1001/visits?limit=3
+
+###
+GET {{baseUrl}}/api/clubs/1

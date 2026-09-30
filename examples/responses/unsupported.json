@@ -4,7 +4,7 @@
   "status": 400,
   "errors": {
     "expand": [
-      "Unsupported expansion: payments. Supported: customer, items, items.product."
+      "Unsupported expansion: payments. Supported: member, visits, visits.club."
     ]
   }
 }
