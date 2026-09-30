@@ -14,7 +14,6 @@ The expansion code in `src/ResourceExpansion.Api/Expansion` is generic. It knows
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [Docker](https://docs.docker.com/get-docker/) (runs PostgreSQL for the app, the tests, and the benchmark)
-- Python 3 (optional; only needed to refresh the captured examples in `docs/` and `examples/`)
 
 ## Quick start
 
@@ -37,7 +36,7 @@ curl "http://localhost:5080/api/memberships/1001?expand=member,visits.club&relat
 curl "http://localhost:5080/api/memberships/1001?expand=payments"   # 400
 ```
 
-In Windows PowerShell, type `curl.exe` instead of `curl`, because `curl` is an alias for `Invoke-WebRequest` there. [examples/requests.http](examples/requests.http) contains every case and runs in Visual Studio, Rider, or the VS Code REST Client. [examples/responses](examples/responses) holds the captured responses.
+In Windows PowerShell, type `curl.exe` instead of `curl`, because `curl` is an alias for `Invoke-WebRequest` there. [examples/requests.http](examples/requests.http) contains every case and runs in Visual Studio, Rider, or the VS Code REST Client.
 
 When you are done:
 
@@ -68,14 +67,14 @@ The benchmark compares one expanded request with fetching the same data through 
 dotnet run -c Release --project benchmarks/ResourceExpansion.Benchmarks -- --filter '*'
 ```
 
-It builds the API image and starts the API, PostgreSQL, and Toxiproxy (for simulated network latency) from `benchmarks/docker/compose.yaml`. It removes those containers when it finishes. A full run takes about 5 minutes, plus the first image build. For results and methodology, see [docs/performance.md](docs/performance.md).
+It builds the API image and starts the API, PostgreSQL, and Toxiproxy (for simulated network latency) from `benchmarks/docker/compose.yaml`. It removes those containers when it finishes. A full run takes about 5 minutes, plus the first image build.
 
 ## Project structure
 
 ```text
 src/ResourceExpansion.Api/
   Expansion/                          Generic, reusable by any resource
-    IExpandableRequest.cs             Expand + RelatedLimit on a request
+    ExpandableRequest.cs              Base record: Expand + RelatedLimit
     ExpandPlan.cs                     Parsing, implied parents, limits
     ExpandRequestValidator.cs         FluentValidation rules for expand and relatedLimit
     ExpansionRules.cs                 Allowlist: path -> typed EF Core Include
@@ -97,9 +96,7 @@ tests/ResourceExpansion.Tests/        xUnit: parser/validator unit tests + integ
 benchmarks/
   ResourceExpansion.Benchmarks/       BenchmarkDotNet: expanded vs. separate requests
   docker/                             compose.yaml (API + PostgreSQL + Toxiproxy), toxiproxy.json
-docs/                                 Blog walkthrough, use cases, performance results
-examples/                             requests.http and captured JSON responses
-scripts/refresh-blog-examples.py      Re-captures examples/responses and the walkthrough appendix
+examples/requests.http                Every request case, runnable from the IDE
 compose.yaml                          Local PostgreSQL for dotnet run
 ```
 
@@ -120,19 +117,3 @@ compose.yaml                          Local PostgreSQL for dotnet run
 | Adding an expansion | One `Allow(path, include)` call in `MembershipExpansions` plus a response field |
 
 Expanded visits are a bounded preview, not a paginated list. Fees are stored as integer cents.
-
-## Refreshing the examples
-
-With the API running:
-
-```sh
-python scripts/refresh-blog-examples.py
-```
-
-This re-captures `examples/responses/*.json` and regenerates the example/source appendix of `docs/blog-walkthrough.md`. Pass `--base-url` if the API runs on a different address.
-
-## Documentation
-
-- [Blog walkthrough and full implementation](docs/blog-walkthrough.md)
-- [Use cases](docs/use-cases.md)
-- [Performance: expanded vs. separate requests](docs/performance.md)

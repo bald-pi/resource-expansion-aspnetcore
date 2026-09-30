@@ -28,11 +28,6 @@ appsettings.*.local.json
 .env
 .env.*
 
-# Python (scripts/refresh-blog-examples.py)
-__pycache__/
-*.py[cod]
-.venv/
-
 # Logs, merge leftovers, OS junk
 *.log
 *.orig

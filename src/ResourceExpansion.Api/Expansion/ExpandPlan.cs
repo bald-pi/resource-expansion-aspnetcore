@@ -18,7 +18,7 @@ public sealed record ExpandPlan(IReadOnlySet<string> Paths, int RelatedLimit)
         .ToHashSet();
 
     // Call only after ExpandRequestValidator has accepted the request.
-    public static ExpandPlan From(IExpandableRequest request)
+    public static ExpandPlan From(ExpandableRequest request)
     {
         var paths = new HashSet<string>();
         foreach (var path in SplitPaths(request.Expand))

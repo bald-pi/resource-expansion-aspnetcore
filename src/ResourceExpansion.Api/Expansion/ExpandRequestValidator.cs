@@ -3,7 +3,7 @@ using FluentValidation;
 namespace ResourceExpansion.Api.Expansion;
 
 public sealed class ExpandRequestValidator<TRequest> : AbstractValidator<TRequest>
-    where TRequest : IExpandableRequest
+    where TRequest : ExpandableRequest
 {
     public ExpandRequestValidator(IReadOnlyList<string> allowed)
     {
